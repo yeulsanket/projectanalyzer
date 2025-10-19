@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy Analyzer | AI-Powered Analysis</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+    <!-- Three.js Background Canvas -->
+    <canvas id="bg-canvas"></canvas>
+    
+    <!-- Animated Particles Overlay -->
+    <div class="particles" id="particles"></div>
+
+    <div class="container">
+        <!-- Header Section with Animation -->
+        <header class="header">
+            <div class="logo-container">
+                <div class="logo-circle"></div>
+                <h1 class="main-title">Privacy Policy Analyzer</h1>
+            </div>
+            <p class="subtitle">AI-Powered Legal Analysis at Your Fingertips</p>
+            <div class="header-stats">
+                <div class="stat-item">
+                    <span class="stat-number" data-target="10000">0</span>
+                    <span class="stat-label">Policies Analyzed</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" data-target="99">0</span>
+                    <span class="stat-label">% Accuracy</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" data-target="5">0</span>
+                    <span class="stat-label">Sec Analysis</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Input Section -->
+            <section class="input-section">
+                <div class="section-header">
+                    <h2>📋 Paste Privacy Policy</h2>
+                    <button class="btn-clear" id="clearBtn">Clear</button>
+                </div>
+                <div class="input-wrapper">
+                    <textarea 
+                        id="policyInput" 
+                        placeholder="Paste any privacy policy text here... Our AI will break it down into actionable insights for you."
+                        rows="10"
+                    ></textarea>
+                    <div class="char-count">
+                        <span id="charCount">0</span> characters
+                    </div>
+                </div>
+                <button class="btn-analyze" id="analyzeBtn">
+                    <span class="btn-icon">🔍</span>
+                    <span class="btn-text">Analyze Policy</span>
+                    <span class="btn-loader"></span>
+                </button>
+            </section>
+
+            <!-- Output Section -->
+            <section class="output-section" id="outputSection">
+                <div class="section-header">
+                    <h2>📊 Analysis Results</h2>
+                    <div class="output-actions">
+                        <button class="btn-icon-action" id="copyBtn" title="Copy to clipboard">
+                            📋
+                        </button>
+                        <button class="btn-icon-action" id="downloadBtn" title="Download as text">
+                            📥
+                        </button>
+                    </div>
+                </div>
+                <div class="output-wrapper" id="outputWrapper">
+                    <div class="placeholder-content">
+                        <div class="placeholder-icon">🤖</div>
+                        <h3>Ready to Analyze</h3>
+                        <p>Paste a privacy policy above and click "Analyze Policy" to get started.</p>
+                    </div>
+                </div>
+                <div class="loading-overlay" id="loadingOverlay">
+                    <div class="loading-spinner"></div>
+                    <p>Analyzing policy with AI...</p>
+                </div>
+            </section>
+
+            <!-- Sample Policies Section -->
+            <section class="samples-section">
+                <h2>⚡ Try Sample Policies</h2>
+                <div class="sample-cards">
+                    <div class="sample-card" data-sample="betting">
+                        <div class="sample-icon">🎰</div>
+                        <h3>Betting App</h3>
+                        <p>Online gambling platform</p>
+                    </div>
+                    <div class="sample-card" data-sample="social">
+                        <div class="sample-icon">📱</div>
+                        <h3>Social Media</h3>
+                        <p>User-generated content</p>
+                    </div>
+                    <div class="sample-card" data-sample="ecommerce">
+                        <div class="sample-icon">🛒</div>
+                        <h3>E-Commerce</h3>
+                        <p>Online shopping site</p>
+                    </div>
+                    <div class="sample-card" data-sample="health">
+                        <div class="sample-icon">🏥</div>
+                        <h3>Health App</h3>
+                        <p>Medical data collection</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>Powered by AI • Made with ❤️ for Privacy Advocates</p>
+        </footer>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.0.2/marked.min.js"></script>
+    <script>
+        // Sample policies data
+        const samplePolicies = {
+            betting: `BetWin Privacy Policy
+
+We collect your personal information including name, email, phone number, date of birth, and government-issued ID for account verification. We also collect your payment information, betting history, IP address, device information, and location data.
+
+Your data is used to process bets, verify your identity, prevent fraud, comply with gambling regulations, send promotional offers, and improve our services. We share your information with payment processors, regulatory authorities, marketing partners, and other third-party service providers.
+
+We retain your data for 7 years after account closure to comply with legal requirements. Your data may be transferred and stored in servers located outside your country.
+
+You have the right to access your data by emailing privacy@betwin.com. You can request deletion after account closure, but we may retain certain data for legal compliance. You can opt-out of marketing emails by clicking unsubscribe.
+
+We use cookies and tracking technologies for analytics and advertising. Third-party advertisers may also collect your data. By using our service, you consent to this privacy policy.`,
+            
+            social: `SocialHub Privacy Policy
+
+We collect profile information, posts, messages, photos, videos, contacts, and interactions. We track your activity, engagement metrics, and use AI to analyze your content preferences.
+
+Your data is used to personalize your feed, show targeted ads, suggest connections, and train our recommendation algorithms. We share data with advertisers, app developers, and may sell aggregated data to third parties.
+
+We retain your data indefinitely, even after account deletion, for backup and legal purposes. You can download your data but cannot fully delete your digital footprint from our systems.`,
+            
+            ecommerce: `ShopFast Privacy Policy
+
+We collect your name, address, payment details, purchase history, browsing behavior, and product reviews. We track items you view, add to cart, and wishlist.
+
+Data is used for order processing, personalized recommendations, marketing campaigns, and fraud prevention. We share information with shipping partners, payment processors, and advertising networks.
+
+You can access your order history anytime. Data retention is 5 years for transaction records. You can unsubscribe from marketing emails but will still receive order-related communications.`,
+            
+            health: `HealthTrack Privacy Policy
+
+We collect sensitive health data including heart rate, sleep patterns, exercise metrics, weight, medications, and medical conditions. We access your device sensors and location for activity tracking.
+
+Data is used for health insights, research purposes, and may be shared with insurance partners and pharmaceutical companies for targeted health programs. We use AI to predict health risks.
+
+You can export your health data in standard formats. We retain data for 10 years. Deletion requests are honored but aggregated research data is retained anonymously.`
+        };
+
+        // Initialize Three.js Background
+        function initThreeJS() {
+            const canvas = document.getElementById('bg-canvas');
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+            
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            camera.position.z = 5;
+
+            // Create geometric particles
+            const geometry = new THREE.BufferGeometry();
+            const vertices = [];
+            const colors = [];
+
+            for (let i = 0; i < 1000; i++) {
+                vertices.push(
+                    (Math.random() - 0.5) * 20,
+                    (Math.random() - 0.5) * 20,
+                    (Math.random() - 0.5) * 20
+                );
+                
+                colors.push(
+                    Math.random() * 0.5 + 0.5,
+                    Math.random() * 0.3 + 0.7,
+                    Math.random() * 0.2 + 0.8
+                );
+            }
+
+            geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+            geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+
+            const material = new THREE.PointsMaterial({
+                size: 0.05,
+                vertexColors: true,
+                transparent: true,
+                opacity: 0.8,
+                blending: THREE.AdditiveBlending
+            });
+
+            const points = new THREE.Points(geometry, material);
+            scene.add(points);
+
+            // Animation loop
+            function animate() {
+                requestAnimationFrame(animate);
+                points.rotation.x += 0.0005;
+                points.rotation.y += 0.0008;
+                renderer.render(scene, camera);
+            }
+            animate();
+
+            // Handle resize
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+        }
+
+        // Initialize Anime.js Animations
+        function initAnimations() {
+            // Header animation
+            anime.timeline({ loop: false })
+                .add({
+                    targets: '.logo-circle',
+                    scale: [0, 1],
+                    rotate: [0, 360],
+                    duration: 1200,
+                    easing: 'easeOutElastic(1, .8)'
+                })
+                .add({
+                    targets: '.main-title',
+                    translateY: [-50, 0],
+                    opacity: [0, 1],
+                    duration: 800,
+                    easing: 'easeOutExpo'
+                }, '-=600')
+                .add({
+                    targets: '.subtitle',
+                    translateY: [30, 0],
+                    opacity: [0, 1],
+                    duration: 800,
+                    easing: 'easeOutExpo'
+                }, '-=600')
+                .add({
+                    targets: '.stat-item',
+                    scale: [0, 1],
+                    opacity: [0, 1],
+                    delay: anime.stagger(100),
+                    duration: 600,
+                    easing: 'easeOutBack'
+                }, '-=400');
+
+            // Animate stat numbers
+            document.querySelectorAll('.stat-number').forEach(stat => {
+                const target = parseInt(stat.getAttribute('data-target'));
+                anime({
+                    targets: stat,
+                    innerHTML: [0, target],
+                    duration: 2000,
+                    delay: 800,
+                    round: 1,
+                    easing: 'easeOutExpo'
+                });
+            });
+
+            // Content sections fade in
+            anime({
+                targets: '.input-section, .output-section, .samples-section',
+                translateY: [50, 0],
+                opacity: [0, 1],
+                delay: anime.stagger(200, { start: 1000 }),
+                duration: 1000,
+                easing: 'easeOutExpo'
+            });
+
+            // Sample cards hover animation
+            document.querySelectorAll('.sample-card').forEach(card => {
+                card.addEventListener('mouseenter', () => {
+                    anime({
+                        targets: card,
+                        scale: 1.05,
+                        translateY: -10,
+                        duration: 300,
+                        easing: 'easeOutCubic'
+                    });
+                });
+
+                card.addEventListener('mouseleave', () => {
+                    anime({
+                        targets: card,
+                        scale: 1,
+                        translateY: 0,
+                        duration: 300,
+                        easing: 'easeOutCubic'
+                    });
+                });
+            });
+        }
+
+        // Character counter
+        const policyInput = document.getElementById('policyInput');
+        const charCount = document.getElementById('charCount');
+
+        policyInput.addEventListener('input', (e) => {
+            const count = e.target.value.length;
+            charCount.textContent = count.toLocaleString();
+            
+            anime({
+                targets: charCount,
+                scale: [1.2, 1],
+                duration: 200,
+                easing: 'easeOutCubic'
+            });
+        });
+
+        // Clear button
+        document.getElementById('clearBtn').addEventListener('click', () => {
+            policyInput.value = '';
+            charCount.textContent = '0';
+            
+            anime({
+                targets: '#policyInput',
+                scale: [0.98, 1],
+                duration: 300,
+                easing: 'easeOutElastic(1, .6)'
+            });
+        });
+
+        // Sample policy loading
+        document.querySelectorAll('.sample-card').forEach(card => {
+            card.addEventListener('click', () => {
+                const sampleType = card.getAttribute('data-sample');
+                policyInput.value = samplePolicies[sampleType];
+                charCount.textContent = samplePolicies[sampleType].length.toLocaleString();
+                
+                // Animate the card selection
+                anime({
+                    targets: card,
+                    backgroundColor: ['#f0f4ff', '#ffffff'],
+                    duration: 600,
+                    easing: 'easeInOutQuad'
+                });
+
+                // Scroll to input
+                policyInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                
+                // Pulse effect on input
+                anime({
+                    targets: '.input-wrapper',
+                    boxShadow: [
+                        '0 0 0 0 rgba(102, 126, 234, 0)',
+                        '0 0 0 10px rgba(102, 126, 234, 0)',
+                    ],
+                    duration: 1000,
+                    easing: 'easeOutExpo'
+                });
+            });
+        });
+
+        // Analyze button functionality
+        const analyzeBtn = document.getElementById('analyzeBtn');
+        const outputSection = document.getElementById('outputSection');
+        const outputWrapper = document.getElementById('outputWrapper');
+        const loadingOverlay = document.getElementById('loadingOverlay');
+
+        analyzeBtn.addEventListener('click', async () => {
+            const policyText = policyInput.value.trim();
+            
+            if (!policyText) {
+                // Shake animation for empty input
+                anime({
+                    targets: '.input-wrapper',
+                    translateX: [
+                        { value: -10, duration: 100 },
+                        { value: 10, duration: 100 },
+                        { value: -10, duration: 100 },
+                        { value: 10, duration: 100 },
+                        { value: 0, duration: 100 }
+                    ],
+                    easing: 'easeInOutSine'
+                });
+                return;
+            }
+
+            // Show loading state
+            analyzeBtn.classList.add('loading');
+            loadingOverlay.style.display = 'flex';
+            
+            anime({
+                targets: '.loading-spinner',
+                rotate: '1turn',
+                duration: 1000,
+                easing: 'linear',
+                loop: true
+            });
+
+            try {
+                // Make API call to Flask backend
+                const response = await fetch('/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ message: policyText })
+                });
+
+                const data = await response.json();
+                
+                // Hide loading
+                analyzeBtn.classList.remove('loading');
+                loadingOverlay.style.display = 'none';
+
+                // Display results with markdown parsing
+                outputWrapper.innerHTML = marked.parse(data.response);
+                
+                // Animate results
+                anime({
+                    targets: '#outputWrapper',
+                    opacity: [0, 1],
+                    translateY: [30, 0],
+                    duration: 800,
+                    easing: 'easeOutExpo'
+                });
+
+                // Scroll to results
+                outputSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+            } catch (error) {
+                analyzeBtn.classList.remove('loading');
+                loadingOverlay.style.display = 'none';
+                
+                outputWrapper.innerHTML = `
+                    <div class="error-message">
+                        <div class="error-icon">⚠️</div>
+                        <h3>Analysis Failed</h3>
+                        <p>${error.message}</p>
+                        <p style="margin-top: 10px; font-size: 0.9em; color: #64748b;">Make sure the Flask server is running and the API key is configured.</p>
+                    </div>
+                `;
+            }
+        });
+
+        // Copy to clipboard
+        document.getElementById('copyBtn').addEventListener('click', () => {
+            const text = outputWrapper.innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                const btn = document.getElementById('copyBtn');
+                const originalText = btn.textContent;
+                btn.textContent = '✅';
+                
+                anime({
+                    targets: btn,
+                    scale: [1, 1.2, 1],
+                    duration: 400,
+                    easing: 'easeOutElastic(1, .6)'
+                });
+                
+                setTimeout(() => { btn.textContent = originalText; }, 2000);
+            });
+        });
+
+        // Download as text file
+        document.getElementById('downloadBtn').addEventListener('click', () => {
+            const text = outputWrapper.innerText;
+            const blob = new Blob([text], { type: 'text/plain' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'privacy-policy-analysis.txt';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+            
+            const btn = document.getElementById('downloadBtn');
+            const originalText = btn.textContent;
+            btn.textContent = '✅';
+            setTimeout(() => { btn.textContent = originalText; }, 2000);
+        });
+
+        // Initialize everything when DOM is ready
+        window.addEventListener('DOMContentLoaded', () => {
+            initThreeJS();
+            initAnimations();
+        });
+    </script>
+</body>
+</html>
